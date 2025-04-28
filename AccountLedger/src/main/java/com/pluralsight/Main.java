@@ -5,62 +5,67 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        //using main class to run program -> all function calling will be here to initiate that portion of the App depending on user input.
-
-        //use local date.parse
-        //credit -> in | debit -> out
-        //create separate classes for in and out
-        //display transactions
-        //load -> add -> save (persistence of data)
-        //newest first = loop backward (i--) .length--
-        //be weary of using substrings for searching to allow partial search terms
-        //look into personalizing the app for coloring of transactions, etc.
-
-        //Integrate the homescreen into the Main Class, not use its own Class file.
-
-
-
-
-    public class HomeScreen {
         Scanner scanner = new Scanner(System.in);
 
-        //each choice will navigate to a different screen of the program
-        //options to direct to next app screen
-        //D deposit
-        //P make payment
-        //L view ledger (option to other class)
-        //exit the app
-        double deposit;
-        double payment;
-        String Ledger;
-        String Exit;
+        boolean running = true;
+
+        while(running){
+            System.out.println("Welcome! Please select an option: ");
+            System.out.println("1: Make a deposit.");
+            System.out.println("2: Make a payment.");
+            System.out.println("3: View the ledger.");
+            System.out.println("4: Exit the app.");
+
+            int selection = scanner.nextInt();
+
+            switch (selection){
+                case 1:
+                    System.out.println("Enter deposit amount: ");
+                    double deposit =scanner.nextDouble();
+                    System.out.println("Your deposit of " + deposit + " is complete.");
+                    break;
+
+                case 2:
+                    System.out.println("Enter your payment amount: ");
+                    double payment  = scanner.nextDouble();
+                    System.out.println("Your payment of " + payment + " is complete.");
+                    break;
+
+                case 3:
+                    int options = 5;
+                    System.out.println("Ledger options are " + options);
+                    switch (options){
+                        case 1:
+                            System.out.println("1: Display all entries");
+                            break;
+                        case 2:
+                            System.out.println("2: Display deposits");
+                            break;
+                        case 3:
+                            System.out.println("3: Display payments");
+                            break;
+                        case 4:
+                            System.out.println("4: Display reports");
+                            break;
+                        case 5:
+                            System.out.println("Exit to homescreen");
+                        default:
+                            System.out.println("");
+                    }
 
 
-        public void appDeposit(){
-            System.out.println("What amount would you like to deposit?: ");
-            deposit = scanner.nextDouble();
-            System.out.println(deposit);
-        }
+                    break;
 
+                case 4:
+                    System.out.println("Exiting the app.");
 
-        public void appPayment(){
-            System.out.println("What amount would you like to pay?: ");
-            payment = scanner.nextDouble();
-        }
+                    running = false; //setting to false closes the loop
+                    break;
 
-
-        boolean appExit = true;
-        public void appExit(){
-            System.out.println(("Exit Application? (Y/N): "));
-            if(appExit){
-                System.out.println("Exiting Application.");
-
-               scanner.close();
-
+                default:
+                    System.out.println("Invalid input, please try again.");
             }
+
         }
-
     }
-
-}
 }
