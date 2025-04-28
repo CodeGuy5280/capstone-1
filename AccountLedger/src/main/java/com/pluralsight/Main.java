@@ -1,5 +1,8 @@
 package com.pluralsight;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Main {
@@ -7,10 +10,16 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+//        LocalDate currentDate = LocalDate.now();
+//        LocalTime currentTime = LocalTime.now();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("|yyyy-MM-dd | HH:mm:ss| \n");
+        String formattedDateTime = currentDateTime.format(formatter);
+
         boolean running = true;
 
         while(running){
-            System.out.println("Welcome! Please select an option: ");
+            System.out.println(formattedDateTime + "Welcome! Please select an option: ");
             System.out.println("1: Make a deposit.");
             System.out.println("2: Make a payment.");
             System.out.println("3: View the ledger.");
@@ -43,16 +52,16 @@ public class Main {
                         int options = scanner.nextInt();
                         switch (options) {
                             case 1:
-                                System.out.println("1: Display all entries");
+                                displayAllEntries();
                                 break;
                             case 2:
-                                System.out.println("2: Display deposits");
+                                displayDeposits();
                                 break;
                             case 3:
-                                System.out.println("3: Display payments");
+                                displayPayments();
                                 break;
                             case 4:
-                                System.out.println("4: Display reports");
+                                displayReports();
                                 break;
                             case 5:
                                 System.out.println("Exit to homescreen");
@@ -72,7 +81,29 @@ public class Main {
                 default:
                     System.out.println("Invalid input, please try again.");
             }
-
         }
+        scanner.close();
     }
+    //methods that will be called within the ledger switch statement to split up code for readability
+        public static void displayAllEntries() {
+            System.out.println("Displaying all ledger entries...");
+        //actually list entries from an ArrayList
+    }
+
+        public static void displayDeposits() {
+            System.out.println("Displaying deposit entries...");
+        //list only deposits
+    }
+
+        public static void displayPayments() {
+            System.out.println("Displaying payment entries...");
+        //list only payments
+    }
+
+        public static void displayReports() {
+            System.out.println("Displaying financial reports...");
+        //generate some reports (totals, averages, etc.)
+
+    }
+
 }
