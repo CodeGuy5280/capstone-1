@@ -3,7 +3,10 @@ package com.pluralsight;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Scanner;
+
+import static java.lang.Double.parseDouble;
 
 public class Main {
 
@@ -23,7 +26,8 @@ public class Main {
             System.out.println("1: Make a deposit.");
             System.out.println("2: Make a payment.");
             System.out.println("3: View the ledger.");
-            System.out.println("4: Exit the app.");
+            System.out.println("4: View current balance.");
+            System.out.println("5: Exit the app.");
 
             int selection = scanner.nextInt();
 
@@ -73,6 +77,13 @@ public class Main {
                     break;
 
                 case 4:
+                    boolean viewBalance = true;
+                    displayCurrentBalance();
+                    System.out.println("1: Exit to homescreen");
+                    viewBalance = false;//false to close loop back to homescreen
+                    break;
+
+                case 5:
                     System.out.println("Exiting the app...");
 
                     running = false; //setting to false closes the loop
@@ -85,6 +96,16 @@ public class Main {
         scanner.close();
     }
     //methods that will be called within the ledger switch statement to split up code for readability
+
+    public static void displayCurrentBalance(){
+        double currentDeposits = 8000; //placeholder value
+        double currentPayments = 2500; //placeholder value
+        double currentBalance = currentDeposits - currentPayments;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("|yyyy-MM-dd | HH:mm:ss| \n");
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+        System.out.println("Current balance: $" + currentBalance);
+    }
+
         public static void displayAllEntries() {
             System.out.println("Displaying all ledger entries...");
         //actually list entries from an ArrayList
@@ -93,6 +114,13 @@ public class Main {
         public static void displayDeposits() {
             System.out.println("Displaying deposit entries...");
         //list only deposits
+            String[] deposits = {"123.23", "2414.32", "2434.24", "2532.35"};
+            for (String deposit : deposits) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("|yyyy-MM-dd | HH:mm:ss| \n");
+                String formattedDateTime = LocalDateTime.now().format(formatter);
+                double depositAmount = parseDouble(deposit);
+                System.out.println("$" + depositAmount + "\n" + formattedDateTime);
+            }
     }
 
         public static void displayPayments() {
@@ -102,7 +130,7 @@ public class Main {
 
         public static void displayReports() {
             System.out.println("Displaying financial reports...");
-        //generate some reports (totals, averages, etc.)
+        //generate some reports (totals, averages, etc.), need to be searchable...
 
     }
 
