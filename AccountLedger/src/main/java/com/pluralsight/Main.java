@@ -1,10 +1,14 @@
 package com.pluralsight;
 
+import java.io.BufferedReader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 
 import static java.lang.Double.parseDouble;
 
@@ -33,15 +37,17 @@ public class Main {
 
             switch (selection){
                 case 1:
-                    System.out.println("Enter deposit amount: ");
-                    double deposit =scanner.nextDouble();
-                    System.out.println("Your deposit of " + deposit + " is complete.");
+                    System.out.print("Enter deposit amount: ");
+                    double deposit = scanner.nextDouble();
+                    writeTransaction(deposit, scanner); // positive amount
+                    System.out.println("Your deposit of $" + deposit + " is complete.");
                     break;
 
                 case 2:
-                    System.out.println("Enter your payment amount: ");
-                    double payment  = scanner.nextDouble();
-                    System.out.println("Your payment of " + payment + " is complete.");
+                    System.out.print("Enter your payment amount: ");
+                    double payment = scanner.nextDouble();
+                    writeTransaction(-payment, scanner); // negative amount
+                    System.out.println("Your payment of $" + payment + " is complete.");
                     break;
 
                 case 3:
@@ -101,7 +107,7 @@ public class Main {
         double currentDeposits = 8000; //placeholder value
         double currentPayments = 2500; //placeholder value
         double currentBalance = currentDeposits - currentPayments;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("|yyyy-MM-dd | HH:mm:ss| \n");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("|yyyy-MM-dd | HH:mm:ss|\n");
         String formattedDateTime = LocalDateTime.now().format(formatter);
         System.out.println("Current balance: $" + currentBalance);
     }
@@ -109,23 +115,80 @@ public class Main {
         public static void displayAllEntries() {
             System.out.println("Displaying all ledger entries...");
         //actually list entries from an ArrayList
-    }
+            System.out.println("Type | Amount | Date");
+
+            try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split("\\|");
+                    if (parts.length == 5) {
+                        String date = parts[0];
+                        String time = parts[1];
+                        String description = parts[2];
+                        String vendor = parts[3];
+                        String amount = parts[4];
+
+                        System.out.printf("%-8s | %-6s | %-15s | %-8s | %5s\n",
+                                date, time, description, vendor, amount);
+                    }else {
+                        System.out.println("System malfunction!");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error reading transactions: " + e.getMessage());
+            }
+        }
+
+
 
         public static void displayDeposits() {
             System.out.println("Displaying deposit entries...");
-        //list only deposits
-            String[] deposits = {"123.23", "2414.32", "2434.24", "2532.35"};
-            for (String deposit : deposits) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("|yyyy-MM-dd | HH:mm:ss| \n");
-                String formattedDateTime = LocalDateTime.now().format(formatter);
-                double depositAmount = parseDouble(deposit);
-                System.out.println("$" + depositAmount + "\n" + formattedDateTime);
+            try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split("\\|");
+
+                    if (parts.length == 5) {
+                        String date = parts[0].trim();
+                        String time = parts[1].trim();
+                        String description = parts[2].trim();
+                        String vendor = parts[3].trim();
+                        double amount = Double.parseDouble(parts[4].trim());
+
+                        if (amount > 0) {
+                            System.out.printf("%-8s | %-6s | %-15s | %-8s | %5s\n",
+                                    date, time, description, vendor, amount);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error reading deposits: " + e.getMessage());
             }
-    }
+        }
 
         public static void displayPayments() {
             System.out.println("Displaying payment entries...");
-        //list only payments
+            try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String[] parts = line.split("\\|");
+
+                    if (parts.length == 5) {
+                        String date = parts[0].trim();
+                        String time = parts[1].trim();
+                        String description = parts[2].trim();
+                        String vendor = parts[3].trim();
+                        double amount = Double.parseDouble(parts[4].trim());
+
+                        if (amount > 0) {
+                            System.out.printf("%-8s | %-6s | %-15s | %-8s | %5s\n",
+                                    date, time, description, vendor, amount);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error reading payments: " + e.getMessage());
+            }
     }
 
         public static void displayReports() {
@@ -134,4 +197,27 @@ public class Main {
 
     }
 
+    public static void writeTransaction(double amount, Scanner scanner) {
+        LocalDateTime now = LocalDateTime.now();
+        String date = now.toLocalDate().toString();
+        String time = now.toLocalTime().withNano(0).toString(); // Remove nanoseconds
+
+        scanner.nextLine(); // Clear the buffer
+
+        System.out.print("Enter description: ");
+        String description = scanner.nextLine();
+
+        System.out.print("Enter vendor: ");
+        String vendor = scanner.nextLine();
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv", true))) {
+            String line = String.format("%s|%s|%s|%s|%.2f", date, time, description, vendor, amount);
+            writer.write(line);
+            writer.newLine();
+            System.out.println("Transaction recorded");
+        } catch (Exception e) {
+            System.out.println("Error writing transaction: " + e.getMessage());
+        }
+
+    }
 }
