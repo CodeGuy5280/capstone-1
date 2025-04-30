@@ -13,9 +13,9 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-
-//        LocalDate currentDate = LocalDate.now();
-//        LocalTime currentTime = LocalTime.now();
+//      TODO: GET RID OF THE FOLLOWING TWO DATE & TIME IMPORT USES
+    /*  LocalDate currentDate = LocalDate.now();
+        LocalTime currentTime = LocalTime.now();*/
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("|yyyy-MM-dd | HH:mm:ss| \n");
         String formattedDateTime = currentDateTime.format(formatter);
@@ -73,6 +73,7 @@ public class Main {
                             case 5:
                                 System.out.println("Exit to homescreen");
                                 viewLedger = false;//false to close loop back to homescreen
+                                break;
                             default:
                                 System.out.println("Returning to homescreen...\n");//new line added for separation in CLI
                         }
@@ -108,10 +109,11 @@ public class Main {
         String formattedDateTime = LocalDateTime.now().format(formatter);
         System.out.println("Current balance: $" + currentBalance);
     }
-                //THIS IS STILL NOT WORKING PROPERLY
+                //TODO:THIS IS STILL NOT WORKING PROPERLY
         //DISPLAY ALL ENTRIES
         public static void displayAllEntries() {
             System.out.println("Displaying all ledger entries...");
+            //CORRECT WHAT IS PRINTED TO REFLECT PROPER OUTPUT
             System.out.println("Type | Amount | Date");
 
             try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
@@ -137,7 +139,7 @@ public class Main {
         }
 
 
-                //HAVE TO ADD A WAY TO ACCESS DEPOSITS IN LEDGER
+                //TODO: HAVE TO ADD A WAY TO ACCESS DEPOSITS IN LEDGER
         //DISPLAY DEPOSITS
         public static void displayDeposits() {
             System.out.println("Displaying deposit entries...");
@@ -147,7 +149,7 @@ public class Main {
                 System.out.println("Error reading deposits: " + e.getMessage());
             }
         }
-                //HAVE TO ADD A WAY TO ACCESS PAYMENTS IN LEDGER
+                //TODO: HAVE TO ADD A WAY TO ACCESS PAYMENTS IN LEDGER
         //DISPLAY PAYMENTS
         public static void displayPayments() {
             System.out.println("Displaying payment entries...");
@@ -160,7 +162,7 @@ public class Main {
         //DISPLAY REPORTS
         public static void displayReports() {
             System.out.print("Search Reports: ");
-        //generate some reports (totals, averages, etc.), need to be searchable...
+        //TODO: generate some reports (totals, averages, etc.), need to be searchable...
             LocalDateTime now = LocalDateTime.now();
 
             try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
@@ -173,6 +175,7 @@ public class Main {
 
     }
     //READ CSV FILE
+    //TODO: FIX THE FILE READING LOGIN DUE TO ONLY PRINTING DEPOSIT
     public static void readingFile(BufferedReader reader) throws IOException {
         String line;
         while ((line = reader.readLine()) != null) {
@@ -185,6 +188,7 @@ public class Main {
                 String vendor = parts[3].trim();
                 double amount = Double.parseDouble(parts[4].trim());
 
+                //LOOK INTO CHANGING IF STATEMENT
                 if (amount > 0) {
                     System.out.printf("%-8s | %-6s | %-10s | %-8s | %5s\n",
                             date, time, description, vendor, amount);
