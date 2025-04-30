@@ -1,14 +1,11 @@
 package com.pluralsight;
 
-import java.io.BufferedReader;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
 
 import static java.lang.Double.parseDouble;
 
@@ -114,7 +111,6 @@ public class Main {
 
         public static void displayAllEntries() {
             System.out.println("Displaying all ledger entries...");
-        //actually list entries from an ArrayList
             System.out.println("Type | Amount | Date");
 
             try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
@@ -140,61 +136,58 @@ public class Main {
         }
 
 
-
+                //HAVE TO ADD A WAY TO ACCESS DEPOSITS IN LEDGER
         public static void displayDeposits() {
             System.out.println("Displaying deposit entries...");
             try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split("\\|");
-
-                    if (parts.length == 5) {
-                        String date = parts[0].trim();
-                        String time = parts[1].trim();
-                        String description = parts[2].trim();
-                        String vendor = parts[3].trim();
-                        double amount = Double.parseDouble(parts[4].trim());
-
-                        if (amount > 0) {
-                            System.out.printf("%-8s | %-6s | %-15s | %-8s | %5s\n",
-                                    date, time, description, vendor, amount);
-                        }
-                    }
-                }
+                readingFile(reader);
             } catch (Exception e) {
                 System.out.println("Error reading deposits: " + e.getMessage());
             }
         }
-
+                //HAVE TO ADD A WAY TO ACCESS PAYMENTS IN LEDGER
         public static void displayPayments() {
             System.out.println("Displaying payment entries...");
             try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    String[] parts = line.split("\\|");
-
-                    if (parts.length == 5) {
-                        String date = parts[0].trim();
-                        String time = parts[1].trim();
-                        String description = parts[2].trim();
-                        String vendor = parts[3].trim();
-                        double amount = Double.parseDouble(parts[4].trim());
-
-                        if (amount > 0) {
-                            System.out.printf("%-8s | %-6s | %-15s | %-8s | %5s\n",
-                                    date, time, description, vendor, amount);
-                        }
-                    }
-                }
+                readingFile(reader);
             } catch (Exception e) {
                 System.out.println("Error reading payments: " + e.getMessage());
             }
     }
 
         public static void displayReports() {
-            System.out.println("Displaying financial reports...");
+            System.out.print("Search Reports: ");
         //generate some reports (totals, averages, etc.), need to be searchable...
+            LocalDateTime now = LocalDateTime.now();
 
+            try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
+                readingFile(reader);
+            } catch (Exception e) {
+                System.out.println("Error reading payments: " + e.getMessage());
+                System.out.println("Displaying financial reports...");
+            }
+
+
+    }
+
+    public static void readingFile(BufferedReader reader) throws IOException {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] parts = line.split("\\|");
+
+            if (parts.length == 5) {
+                String date = parts[0].trim();
+                String time = parts[1].trim();
+                String description = parts[2].trim();
+                String vendor = parts[3].trim();
+                double amount = Double.parseDouble(parts[4].trim());
+
+                if (amount > 0) {
+                    System.out.printf("%-8s | %-6s | %-10s | %-8s | %5s\n",
+                            date, time, description, vendor, amount);
+                }
+            }
+        }
     }
 
     public static void writeTransaction(double amount, Scanner scanner) {
@@ -211,7 +204,7 @@ public class Main {
         String vendor = scanner.nextLine();
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv", true))) {
-            String line = String.format("%s|%s|%s|%s|%.2f", date, time, description, vendor, amount);
+            String line = String.format("%-8s|%-6s|%s|%-4s|%.2f", date, time, description, vendor, amount);
             writer.write(line);
             writer.newLine();
             System.out.println("Transaction recorded");
