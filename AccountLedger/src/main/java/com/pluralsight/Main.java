@@ -108,7 +108,8 @@ public class Main {
         String formattedDateTime = LocalDateTime.now().format(formatter);
         System.out.println("Current balance: $" + currentBalance);
     }
-
+                //THIS IS STILL NOT WORKING PROPERLY
+        //DISPLAY ALL ENTRIES
         public static void displayAllEntries() {
             System.out.println("Displaying all ledger entries...");
             System.out.println("Type | Amount | Date");
@@ -137,6 +138,7 @@ public class Main {
 
 
                 //HAVE TO ADD A WAY TO ACCESS DEPOSITS IN LEDGER
+        //DISPLAY DEPOSITS
         public static void displayDeposits() {
             System.out.println("Displaying deposit entries...");
             try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
@@ -146,6 +148,7 @@ public class Main {
             }
         }
                 //HAVE TO ADD A WAY TO ACCESS PAYMENTS IN LEDGER
+        //DISPLAY PAYMENTS
         public static void displayPayments() {
             System.out.println("Displaying payment entries...");
             try (BufferedReader reader = new BufferedReader(new FileReader("transactions.csv"))) {
@@ -154,7 +157,7 @@ public class Main {
                 System.out.println("Error reading payments: " + e.getMessage());
             }
     }
-
+        //DISPLAY REPORTS
         public static void displayReports() {
             System.out.print("Search Reports: ");
         //generate some reports (totals, averages, etc.), need to be searchable...
@@ -169,7 +172,7 @@ public class Main {
 
 
     }
-
+    //READ CSV FILE
     public static void readingFile(BufferedReader reader) throws IOException {
         String line;
         while ((line = reader.readLine()) != null) {
@@ -189,7 +192,7 @@ public class Main {
             }
         }
     }
-
+    //WRITE TRANSACTION
     public static void writeTransaction(double amount, Scanner scanner) {
         LocalDateTime now = LocalDateTime.now();
         String date = now.toLocalDate().toString();
