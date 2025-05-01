@@ -63,6 +63,7 @@ public class Main {
                                 break;
                             case 4:
                                 displayReports();
+
                                 break;
                             case 5:
                                 System.out.println("Exit to homescreen");
@@ -121,7 +122,7 @@ public class Main {
                         String vendor = parts[3];
                         String amount = parts[4];
 
-                        System.out.printf("%-8s | %-6s | %-15s | %-8s | %5s\n",
+                        System.out.printf("%s | %s | %s | %s | %s\n",
                                 date, time, description, vendor, amount);
                     }else {
                         System.out.println("System malfunction!");
@@ -154,16 +155,26 @@ public class Main {
             }
     }
         //DISPLAY REPORTS
-        public static void displayReports() {
-            System.out.print("Search Reports: ");
         //TODO: generate some reports (totals, averages, etc.), need to be searchable...
-            LocalDateTime now = LocalDateTime.now();
+    public static void displayReports() {
+            boolean viewReports = true;
+            while(viewReports) {
+                LocalDateTime now = LocalDateTime.now();
+                System.out.println("Report options: ");
+                System.out.println("1: Month To Date");
+                System.out.println("2: Previous Month");
+                System.out.println("3: Year To Date");
+                System.out.println("4: Previous Year");
+                System.out.println("5: Search by Vendor");
+                System.out.println("0: Back");
 
-            try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
-                readingFile(reader, "Report");
-            } catch (Exception e) {
-                System.out.println("Error reading payments: " + e.getMessage());
-                System.out.println("Displaying financial reports...");
+                try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
+                    readingFile(reader, "Report");
+                } catch (Exception e) {
+                    System.out.println("Error reading payments: " + e.getMessage());
+                    System.out.println("Displaying financial reports...");
+                }
+                break;
             }
 
 
@@ -185,7 +196,7 @@ public class Main {
 
                 //LOOK INTO CHANGING IF STATEMENT
                 if (amount > 0) {
-                    System.out.printf("%-8s | %-6s | %-10s | %-8s | %5s | %s\n",
+                    System.out.printf("%s | %s | %s | %s | %s | %s\n",
                             date, time, description, vendor, amount, type);
                 }
             }
@@ -209,7 +220,7 @@ public class Main {
         String type = amount > 0 ? "Deposit" : "Payment";
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv", true))) {
-            String line = String.format("%-8s|%-6s|%s|%-4s|%.2f|%s", date, time, description, vendor, amount, type);
+            String line = String.format("%s|%s|%s|%s|%.2f|%s", date, time, description, vendor, amount, type);
             writer.write(line);
             writer.newLine();
             System.out.println("Transaction recorded: " + type);
