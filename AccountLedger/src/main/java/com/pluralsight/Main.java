@@ -109,21 +109,22 @@ public class Main {
         public static void displayAllEntries() {
             System.out.println("Displaying all ledger entries...");
             //CORRECT WHAT IS PRINTED TO REFLECT PROPER OUTPUT
-            System.out.println("Date | Time | Amount");
+            //System.out.println("Date | Time | Amount");
 
             try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.split("\\|");
-                    if (parts.length == 5) {
-                        String date = parts[0];
-                        String time = parts[1];
-                        String description = parts[2];
-                        String vendor = parts[3];
-                        String amount = parts[4];
+                    if (parts.length == 6) {
+                        String date = parts[0].trim();
+                        String time = parts[1].trim();
+                        String description = parts[2].trim();
+                        String vendor = parts[3].trim();
+                        String amount = parts[4].trim();
+                        String type = parts[5].trim();
 
-                        System.out.printf("%s | %s | %s | %s | %s\n",
-                                date, time, description, vendor, amount);
+                        System.out.printf("%s | %s | %s | %s | %s | %s |",
+                                date, time, description, vendor, amount, type);
                     }else {
                         System.out.println("System malfunction!");
                     }
@@ -192,11 +193,14 @@ public class Main {
                 String description = parts[2].trim();
                 String vendor = parts[3].trim();
                 double amount = Double.parseDouble(parts[4].trim());
-                String type = parts[5];
+                String type = parts[5].trim();
 
-                //LOOK INTO CHANGING IF STATEMENT
-                if (amount > 0) {
-                    System.out.printf("%s | %s | %s | %s | %s | %s\n",
+                //TODO: LOOK INTO CHANGING IF STATEMENT (ONLY DEPOSITS SHOWING)
+//                if (amount > 0) {
+//                    System.out.printf("%s | %s | %s | %s | %s | %s |\n",
+//                            date, time, description, vendor, amount, type);
+                if ("all".equalsIgnoreCase(filterType) || type.equalsIgnoreCase(filterType)) {
+                    System.out.printf("%s | %s | %s | %s | %.2f | %s\n",
                             date, time, description, vendor, amount, type);
                 }
             }
@@ -220,7 +224,7 @@ public class Main {
         String type = amount > 0 ? "Deposit" : "Payment";
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv", true))) {
-            String line = String.format("%s|%s|%s|%s|%.2f|%s", date, time, description, vendor, amount, type);
+            String line = String.format("%s|%s|%s|%s|%s|%s|", date, time, description, vendor, amount, type);
             writer.write(line);
             writer.newLine();
             System.out.println("Transaction recorded: " + type);
