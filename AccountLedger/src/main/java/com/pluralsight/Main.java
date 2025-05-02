@@ -125,7 +125,7 @@ public class Main {
                         double amount = Double.parseDouble(parts[4]);
 
 
-                        System.out.printf("%s | %s | %s | %s | %.2f |\n",
+                        System.out.printf("%s | %s | %s | %s | %.2f\n",
                                 date, time, description, vendor, amount);
                     }else {
                         System.out.println("System malfunction!");
@@ -243,7 +243,7 @@ public class Main {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv", true))) {
 
-            String line = String.format("%s|%s|%s|%s|%.2f|", date, time, description, vendor, amount);
+            String line = String.format("%s|%s|%s|%s|%.2f", date, time, description, vendor, amount);
             writer.write(line);
             writer.newLine();
             System.out.println("Transaction recorded: " + type);

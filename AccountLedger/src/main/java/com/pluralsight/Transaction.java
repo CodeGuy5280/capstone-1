@@ -10,9 +10,6 @@ public class Transaction {
         return date;
     }
 
-    public Transaction() {
-    }
-
     public void setDate(LocalDate date) {
         this.date = date;
     }
@@ -66,7 +63,7 @@ public class Transaction {
 
     }
     public String toFormattedString() {
-        return String.format("%s | %s | %s | %s | %f",
+        return String.format("%s | %s | %s | %s | %.2f",
                 date, time, description, vendor, amount);
     }
 }
