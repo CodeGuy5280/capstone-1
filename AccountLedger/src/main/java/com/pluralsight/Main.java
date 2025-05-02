@@ -175,14 +175,23 @@ public class Main {
                 int choice = scanner.nextInt();
                 scanner.nextLine();  // Consume newline
 
+                //TODO: ADD LOGIC FOR SEARCH: CURRENTMONTH, CURRENTDATE, PREVIOUSMONTH, CURRENTYEAR, PREVIOUSYEAR AND VENDOR NAME
                 switch (choice) {
                     case 0:
                         viewReports = false;
                         break;
                     case 1:
-                        System.out.println("Month To Date report selected");
+                        System.out.println(/*currentMonth*/ "To" + /*currentDate*/ "report selected");
                         // Implement report logic here
                         break;
+                    case 2:
+                        System.out.println("Previous month selected"/*+ previousMonth*/);
+                    case 3:
+                        System.out.println("Year to date selected" /*+ currentYear*/);
+                    case 4:
+                        System.out.println("Previous year selected" /*+ previousYear*/);
+                    case 5:
+                        System.out.println("Enter vendor name: "/*+ vendor name*/);
                     // Add cases 2-5 similarly
                     default:
                         System.out.println("Invalid choice");
