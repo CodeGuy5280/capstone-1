@@ -5,7 +5,6 @@ import java.time.LocalTime;
 
 public class Transaction {
 
-    LocalDate date;
 
     public LocalDate getDate() {
         return date;
@@ -50,10 +49,13 @@ public class Transaction {
         this.amount = amount;
     }
 
-    LocalTime time;
-    String description;
-    String vendor;
-    double amount;
+
+    private LocalDate date;
+    private LocalTime time;
+    private String description;
+    private String vendor;
+    private double amount;
+    private String type;
 
     public Transaction(LocalDate d, LocalTime time, String description, String vendor, double amount) {
         this.date = d;
@@ -61,5 +63,10 @@ public class Transaction {
         this.description = description;
         this.vendor = vendor;
         this.amount = amount;
+
+    }
+    public String toFormattedString() {
+        return String.format("%s | %s | %s | %s | %f",
+                date, time, description, vendor, amount);
     }
 }

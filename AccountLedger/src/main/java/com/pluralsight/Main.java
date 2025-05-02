@@ -60,9 +60,11 @@ public class Main {
                                 break;
                             case 2:
                                 displayDeposits();
+                                readingFile(loadTransaction(), "Deposit");
                                 break;
                             case 3:
                                 displayPayments();
+                                readingFile(loadTransaction(), "Payment");
                                 break;
                             case 4:
                                 displayReports();
@@ -107,12 +109,9 @@ public class Main {
         String formattedDateTime = LocalDateTime.now().format(formatter);
         System.out.println("Current balance: $" + currentBalance);
     }
-                //TODO:THIS IS STILL NOT WORKING PROPERLY
         //DISPLAY ALL ENTRIES
         public static void displayAllEntries() {
             System.out.println("Displaying all ledger entries...");
-            //CORRECT WHAT IS PRINTED TO REFLECT PROPER OUTPUT
-            //System.out.println("Date | Time | Amount");
 
             try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
                 String line;
@@ -126,7 +125,7 @@ public class Main {
                         double amount = Double.parseDouble(parts[4]);
 
 
-                        System.out.printf("%s | %s | %s | %s | %s |\n",
+                        System.out.printf("%s | %s | %s | %s | %.2f |\n",
                                 date, time, description, vendor, amount);
                     }else {
                         System.out.println("System malfunction!");
@@ -142,28 +141,24 @@ public class Main {
         //DISPLAY DEPOSITS
         public static void displayDeposits() {
             System.out.println("Displaying deposit entries...");
-            try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
-                readingFile(reader, "Deposit");
-            } catch (Exception e) {
-                System.out.println("Error reading deposits: " + e.getMessage());
-            }
+            ArrayList<Transaction> transactions = loadTransaction();
+                readingFile(transactions, "Deposit");
         }
+
                 //TODO: HAVE TO ADD A WAY TO ACCESS PAYMENTS IN LEDGER
         //DISPLAY PAYMENTS
         public static void displayPayments() {
             System.out.println("Displaying payment entries...");
-            try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
-                readingFile(reader, "Payment");
-            } catch (Exception e) {
-                System.out.println("Error reading payments: " + e.getMessage());
-            }
-    }
+            ArrayList<Transaction> transactions = loadTransaction();
+            readingFile(transactions, "Payment");
+        }
+
+
+
         //DISPLAY REPORTS
         //TODO: generate some reports (totals, averages, etc.), need to be searchable...
-    public static <Transaction> void displayReports() {
+    public static void displayReports() {
 
-        //TODO: Fix exiting loop without executing code or allowing selection
-//        ArrayList<Transaction> transactions = loadTransaction();
 
             boolean viewReports = true;
             while(viewReports) {
@@ -176,20 +171,21 @@ public class Main {
                 System.out.println("5: Search by Vendor");
                 System.out.println("0: Back");
 
-                try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
-                    readingFile(reader, "Report");
+                try {
+                    FileReader fileReader = new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv");
+                BufferedReader reader = new BufferedReader(fileReader);
                 } catch (Exception e) {
                     System.out.println("Error reading payments: " + e.getMessage());
                     System.out.println("Displaying financial reports...");
-                }
+                    }
                 break;
             }
     }
-            //TODO: FIX ARRAYLIST (<TRANSACTION>), to only accept objects of type Transaction, load method not working
+
     public static ArrayList<Transaction> loadTransaction(){
         ArrayList<Transaction> transactions = new ArrayList<>();
         try  {
-            FileReader fileReader = new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv");
+                FileReader fileReader = new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv");
             BufferedReader reader = new BufferedReader(fileReader);
 
             String line;
@@ -202,8 +198,10 @@ public class Main {
                     String vendor = parts[3];
                     double amount = Double.parseDouble(parts[4]);
 
-                    Transaction t = new Transaction(date, time, description, vendor, amount);
-                    transactions.add(t );
+                    System.out.println("Loaded " + transactions.size() + " transactions.");
+
+                    Transaction transaction = new Transaction(date, time, description, vendor, amount);
+                    transactions.add(transaction);
                 }
             }
         }catch (IOException e){
@@ -214,32 +212,23 @@ public class Main {
 
     //READ CSV FILE
     //TODO: FIX THE FILE READING LOGIN DUE TO ONLY PRINTING DEPOSIT
-    public static void readingFile(BufferedReader reader, String filterType) throws IOException {
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] parts = line.split("\\|");
+    public static void readingFile(ArrayList<Transaction> transactions, String typeFilter) {
 
-            if (parts.length == 5) {
-                String date = parts[0];
-                String time = parts[1];
-                String description = parts[2];
-                String vendor = parts[3];
-                double amount = Double.parseDouble(parts[4]);
+        for (Transaction t : transactions) {
+            if ("all".equalsIgnoreCase(typeFilter)
+                    || ("Deposit".equalsIgnoreCase(typeFilter) && t.getAmount() > 0)
+                    || ("Payment".equalsIgnoreCase(typeFilter) && t.getAmount() < 0)) {
 
-
-                //TODO: LOOK INTO CHANGING IF STATEMENT (ONLY DEPOSITS SHOWING)
-//                if (amount > 0) {
-//                    System.out.printf("%s | %s | %s | %s | %s | %s |\n",
-//                            date, time, description, vendor, amount, type);
-                }
+                System.out.println(t.toFormattedString());
             }
         }
+    }
 
     //WRITE TRANSACTION
     public static void writeTransaction(double amount, Scanner scanner) {
         LocalDateTime now = LocalDateTime.now();
         String date = now.toLocalDate().toString();
-        String time = now.toLocalTime().withNano(0).toString(); // Remove nanoseconds
+        String time = now.toLocalTime().withNano(0).toString();
 
         scanner.nextLine(); // Clear the buffer
 
@@ -253,7 +242,8 @@ public class Main {
         String type = amount > 0 ? "Deposit" : "Payment";
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv", true))) {
-            String line = String.format("%s|%s|%s|%s|%s|", date, time, description, vendor, amount);
+
+            String line = String.format("%s|%s|%s|%s|%.2f|", date, time, description, vendor, amount);
             writer.write(line);
             writer.newLine();
             System.out.println("Transaction recorded: " + type);
