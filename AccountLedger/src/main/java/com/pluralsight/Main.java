@@ -9,16 +9,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 
-public class Main {
+public class Main { //ENTRY POINT FOR APP
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args) { //MAIN METHOD
+        Scanner scanner = new Scanner(System.in); //READING USER INPUT
+        //USING CURRENT DATE AND TIME, THEN FORMATTING
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("|yyyy-MM-dd | HH:mm:ss| \n");
         String formattedDateTime = currentDateTime.format(formatter);
 
-        boolean running = true;
+        boolean running = true; //WHILE LOOP RUNS AS LONG AS RUNNING == TRUE
 
+        //MAIN WHILE LOOP W/ PROMPTS TO DIRECT TO EACH CASE
         while(running){
             System.out.println(formattedDateTime + "Welcome! Please select an option: ");
             System.out.println("D: Make a deposit.");
@@ -26,25 +28,27 @@ public class Main {
             System.out.println("L: View the ledger.");
             System.out.println("C: View current balance.");
             System.out.println("X: Exit the app.");
-
+        //LOOKS FOR USER INPUT OF A CHAR FROM USER
             String selection = scanner.next();
 
             switch (selection){
+                //DEPOSIT CASE
                 case "d", "D":
                     System.out.print("Enter deposit amount: ");
                     double deposit = scanner.nextDouble();
                     writeTransaction(deposit, scanner); // positive amount
                     System.out.println("Your deposit of $" + String.format("%.2f", deposit) + " is complete.");
                     break;
-
+                //PAYMENT CASE
                 case "p", "P":
                     System.out.print("Enter your payment amount: ");
                     double payment = scanner.nextDouble();
                     writeTransaction(-payment, scanner); // negative amount
                     System.out.println("Your payment of $" + String.format("%.2f", payment) + " is complete.");
                     break;
-
+                //VIEW SUBMENU "LEDGER"
                 case "l", "L":
+                    //REUSING LOGIC OF MAIN WHILE LOOP TO DISPLAY LEDGER MENU
                     boolean viewLedger = true;
                     while (viewLedger) {
                         System.out.println("Ledger options: ");
@@ -79,7 +83,7 @@ public class Main {
                         }
                     }
                     break;
-
+                //CASE TO DISPLAY CURRENT BALANCE (CURRENTLY HARDCODED)
                 case "c", "C":
                     boolean viewBalance = true;
                     displayCurrentBalance();
@@ -112,8 +116,9 @@ public class Main {
         //DISPLAY ALL ENTRIES
         public static void displayAllEntries() {
             System.out.println("Displaying all ledger entries...");
-
+            //READS CSV FILE SPLITTING ON EACH |
             try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"))) {
+                //DECLARING LINE VAR TO USE FOR SPLITTING AND PARSING,
                 String line;
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.split("\\|");
@@ -137,16 +142,14 @@ public class Main {
         }
 
 
-                //TODO: HAVE TO ADD A WAY TO ACCESS DEPOSITS IN LEDGER
-        //DISPLAY DEPOSITS
+        //DISPLAY DEPOSITS: LOADS TRANSACTION FROM ARRAYLIST AND FILTERS ON TYPE "DEPOSIT"
         public static void displayDeposits() {
             System.out.println("Displaying deposit entries...");
             ArrayList<Transaction> transactions = loadTransaction();
                 readingFile(transactions, "Deposit");
         }
 
-                //TODO: HAVE TO ADD A WAY TO ACCESS PAYMENTS IN LEDGER
-        //DISPLAY PAYMENTS
+        //DISPLAY PAYMENTS:LOADS TRANSACTION FROM ARRAYLIST AND FILTERS ON TYPE "PAYMENT"
         public static void displayPayments() {
             System.out.println("Displaying payment entries...");
             ArrayList<Transaction> transactions = loadTransaction();
@@ -159,7 +162,7 @@ public class Main {
         //TODO: generate some reports (totals, averages, etc.), need to be searchable...
     public static void displayReports(Scanner scanner) {
 
-
+        //REUSING LOGIC OF MAIN WHILE LOOP TO DISPLAY REPORTS MENU
         boolean viewReports = true;
         while (viewReports) {
             LocalDateTime now = LocalDateTime.now();
@@ -170,7 +173,7 @@ public class Main {
             System.out.println("4: Previous Year");
             System.out.println("5: Search by Vendor");
             System.out.println("0: Back");
-
+            //TRY SEQUENCE INITIATING THE SWITCH STATEMENT (SEARCH NOT YET COMPLETE), SHOULD ALLOW FILTERING AND SEARCH
             try {
                 int choice = scanner.nextInt();
                 scanner.nextLine();  // Consume newline
@@ -206,7 +209,7 @@ public class Main {
             }
         }
     }
-
+    //METHOD THAT CREATES TRANSACTION OBJECTS, ADDING THEM TO AN ARRAYLIST
     public static ArrayList<Transaction> loadTransaction(){
         ArrayList<Transaction> transactions = new ArrayList<>();
         try  {
@@ -230,11 +233,12 @@ public class Main {
         }catch (IOException e){
             System.out.println("Error loading transaction reports" + e.getMessage());
         }
+        //RETURNING THE ARRAYLIST OF TRANSACTION OBJECTS
     return transactions;
     }
 
     //READ CSV FILE
-    //TODO: FIX THE FILE READING LOGIN DUE TO ONLY PRINTING DEPOSIT
+    //LOOPS THROUGH ALL TRANSACTION OBJECTS FILTERING BASED ON TYPE
     public static void readingFile(ArrayList<Transaction> transactions, String typeFilter) {
 
         for (Transaction t : transactions) {
@@ -261,11 +265,11 @@ public class Main {
         System.out.print("Enter vendor: ");
         String vendor = scanner.nextLine();
 
-        //transaction type: deposit or payment
+        //SAVES THE NEW DEPOSIT OR PAYMENT TO CSV
         String type = amount > 0 ? "Deposit" : "Payment";
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv", true))) {
-
+            //BUILDING OF CSV LINE TO ADD
             String line = String.format("%s|%s|%s|%s|%.2f", date, time, description, vendor, amount);
             writer.write(line);
             writer.newLine();

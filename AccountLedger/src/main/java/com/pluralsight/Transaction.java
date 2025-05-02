@@ -3,6 +3,8 @@ package com.pluralsight;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+//THIS CLASS ENABLES FILTERING, FORMATTING, AND SEARCHING (EVENTUALLY)
+//GETTERS AND SETTERS USED TO ACCESS AND CHANGE PRIVATE FIELDS
 public class Transaction {
 
 
@@ -46,7 +48,7 @@ public class Transaction {
         this.amount = amount;
     }
 
-
+    //ATTRIBUTES OF THE TRANSACTION OBJECT
     private LocalDate date;
     private LocalTime time;
     private String description;
@@ -54,6 +56,7 @@ public class Transaction {
     private double amount;
     private String type;
 
+    //CREATES A NEW TRANSACTION OBJECT WITH THE LISTED VARIABLES
     public Transaction(LocalDate d, LocalTime time, String description, String vendor, double amount) {
         this.date = d;
         this.time = time;
@@ -62,6 +65,7 @@ public class Transaction {
         this.amount = amount;
 
     }
+    //FORMATS THE STRING OF TRANSACTION OBJECT
     public String toFormattedString() {
         return String.format("%s | %s | %s | %s | %.2f",
                 date, time, description, vendor, amount);
