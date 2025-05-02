@@ -60,14 +60,14 @@ public class Main {
                                 break;
                             case 2:
                                 displayDeposits();
-                                readingFile(loadTransaction(), "Deposit");
+
                                 break;
                             case 3:
                                 displayPayments();
-                                readingFile(loadTransaction(), "Payment");
+
                                 break;
                             case 4:
-                                displayReports();
+                                displayReports(scanner);
 
                                 break;
                             case 5:
@@ -113,7 +113,7 @@ public class Main {
         public static void displayAllEntries() {
             System.out.println("Displaying all ledger entries...");
 
-            try (BufferedReader reader = new BufferedReader(new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv"))) {
+            try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/transactions.csv"))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     String[] parts = line.split("\\|");
@@ -157,35 +157,47 @@ public class Main {
 
         //DISPLAY REPORTS
         //TODO: generate some reports (totals, averages, etc.), need to be searchable...
-    public static void displayReports() {
+    public static void displayReports(Scanner scanner) {
 
 
-            boolean viewReports = true;
-            while(viewReports) {
-                LocalDateTime now = LocalDateTime.now();
-                System.out.println("Report options: ");
-                System.out.println("1: Month To Date");
-                System.out.println("2: Previous Month");
-                System.out.println("3: Year To Date");
-                System.out.println("4: Previous Year");
-                System.out.println("5: Search by Vendor");
-                System.out.println("0: Back");
+        boolean viewReports = true;
+        while (viewReports) {
+            LocalDateTime now = LocalDateTime.now();
+            System.out.println("Report options: ");
+            System.out.println("1: Month To Date");
+            System.out.println("2: Previous Month");
+            System.out.println("3: Year To Date");
+            System.out.println("4: Previous Year");
+            System.out.println("5: Search by Vendor");
+            System.out.println("0: Back");
 
-                try {
-                    FileReader fileReader = new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv");
-                BufferedReader reader = new BufferedReader(fileReader);
-                } catch (Exception e) {
-                    System.out.println("Error reading payments: " + e.getMessage());
-                    System.out.println("Displaying financial reports...");
-                    }
-                break;
+            try {
+                int choice = scanner.nextInt();
+                scanner.nextLine();  // Consume newline
+
+                switch (choice) {
+                    case 0:
+                        viewReports = false;
+                        break;
+                    case 1:
+                        System.out.println("Month To Date report selected");
+                        // Implement report logic here
+                        break;
+                    // Add cases 2-5 similarly
+                    default:
+                        System.out.println("Invalid choice");
+                }
+            } catch (Exception e) {
+                System.out.println("Error: Please enter a number");
+                scanner.nextLine();  // Clear invalid input
             }
+        }
     }
 
     public static ArrayList<Transaction> loadTransaction(){
         ArrayList<Transaction> transactions = new ArrayList<>();
         try  {
-                FileReader fileReader = new FileReader("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv");
+                FileReader fileReader = new FileReader("src/main/resources/transactions.csv");
             BufferedReader reader = new BufferedReader(fileReader);
 
             String line;
@@ -197,8 +209,6 @@ public class Main {
                     String description = parts[2];
                     String vendor = parts[3];
                     double amount = Double.parseDouble(parts[4]);
-
-                    System.out.println("Loaded " + transactions.size() + " transactions.");
 
                     Transaction transaction = new Transaction(date, time, description, vendor, amount);
                     transactions.add(transaction);
@@ -241,7 +251,7 @@ public class Main {
         //transaction type: deposit or payment
         String type = amount > 0 ? "Deposit" : "Payment";
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("C:\\Users\\AlexJ\\pluralsight\\capstone-1\\AccountLedger\\src\\main\\java\\com\\pluralsight\\transactions.csv", true))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/resources/transactions.csv", true))) {
 
             String line = String.format("%s|%s|%s|%s|%.2f", date, time, description, vendor, amount);
             writer.write(line);
