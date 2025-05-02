@@ -48,6 +48,7 @@ public class Transaction {
         this.amount = amount;
     }
 
+
     //ATTRIBUTES OF THE TRANSACTION OBJECT
     private LocalDate date;
     private LocalTime time;
@@ -63,8 +64,8 @@ public class Transaction {
         this.description = description;
         this.vendor = vendor;
         this.amount = amount;
-
     }
+
     //FORMATS THE STRING OF TRANSACTION OBJECT
     public String toFormattedString() {
         return String.format("%s | %s | %s | %s | %.2f",

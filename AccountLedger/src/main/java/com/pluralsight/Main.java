@@ -104,6 +104,7 @@ public class Main { //ENTRY POINT FOR APP
         scanner.close();
     }
 
+
                 //TODO: NOT MANDATORY ONLY HARD CODED BALANCE, UPDATE TO REALTIME
     public static void displayCurrentBalance(){
         double currentDeposits = 8000;//placeholder value
@@ -113,6 +114,8 @@ public class Main { //ENTRY POINT FOR APP
         String formattedDateTime = LocalDateTime.now().format(formatter);
         System.out.println("Current balance: $" + currentBalance);
     }
+
+
         //DISPLAY ALL ENTRIES
         public static void displayAllEntries() {
             System.out.println("Displaying all ledger entries...");
@@ -149,13 +152,13 @@ public class Main { //ENTRY POINT FOR APP
                 readingFile(transactions, "Deposit");
         }
 
+
         //DISPLAY PAYMENTS:LOADS TRANSACTION FROM ARRAYLIST AND FILTERS ON TYPE "PAYMENT"
         public static void displayPayments() {
             System.out.println("Displaying payment entries...");
             ArrayList<Transaction> transactions = loadTransaction();
             readingFile(transactions, "Payment");
         }
-
 
 
         //DISPLAY REPORTS
@@ -209,6 +212,8 @@ public class Main { //ENTRY POINT FOR APP
             }
         }
     }
+
+
     //METHOD THAT CREATES TRANSACTION OBJECTS, ADDING THEM TO AN ARRAYLIST
     public static ArrayList<Transaction> loadTransaction(){
         ArrayList<Transaction> transactions = new ArrayList<>();
@@ -237,6 +242,7 @@ public class Main { //ENTRY POINT FOR APP
     return transactions;
     }
 
+
     //READ CSV FILE
     //LOOPS THROUGH ALL TRANSACTION OBJECTS FILTERING BASED ON TYPE
     public static void readingFile(ArrayList<Transaction> transactions, String typeFilter) {
@@ -250,6 +256,7 @@ public class Main { //ENTRY POINT FOR APP
             }
         }
     }
+
 
     //WRITE TRANSACTION
     public static void writeTransaction(double amount, Scanner scanner) {
@@ -277,6 +284,5 @@ public class Main { //ENTRY POINT FOR APP
         } catch (Exception e) {
             System.out.println("Error writing transaction: " + e.getMessage());
         }
-
     }
 }
