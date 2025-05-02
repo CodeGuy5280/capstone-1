@@ -182,16 +182,20 @@ public class Main {
                         break;
                     case 1:
                         System.out.println(/*currentMonth*/ "To" + /*currentDate*/ "report selected");
-                        // Implement report logic here
                         break;
+                        // Implement report logic here
                     case 2:
                         System.out.println("Previous month selected"/*+ previousMonth*/);
+                        break;
                     case 3:
                         System.out.println("Year to date selected" /*+ currentYear*/);
+                        break;
                     case 4:
                         System.out.println("Previous year selected" /*+ previousYear*/);
+                        break;
                     case 5:
                         System.out.println("Enter vendor name: "/*+ vendor name*/);
+                        break;
                     // Add cases 2-5 similarly
                     default:
                         System.out.println("Invalid choice");
